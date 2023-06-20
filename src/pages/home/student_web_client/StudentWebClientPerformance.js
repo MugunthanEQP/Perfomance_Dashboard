@@ -1,4 +1,20 @@
 import React, { useState, useEffect } from 'react'
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+// material-ui
+import {
+  Grid,
+  Divider,
+  Typography,
+} from '@mui/material'
+
+import MainCard from './../../../components/MainCard'
+
 
 import {
   Chart as ChartJS,
@@ -19,7 +35,6 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
 
 ChartJS.register(
   CategoryScale,
@@ -37,68 +52,20 @@ function parseXML(text) {
     var parser = new DOMParser()
     var doc = parser.parseFromString(text, 'text/xml')
   }
-  // else {
-  //     // Internet Explorer
-  //     var doc = new ActiveXObject('Microsoft.XMLDOM');
-  //     doc.async = 'false';
-  //     doc.loadXML(text);
-  // }
   return doc
 }
 
-/** Sample Data format from XML Blob parsing **/
-// const data = {
-//   testplan: [
-//     {
-//       name: 'Dashboard Changes',
-//       version: [
-//         {
-//           name: '23.1',
-//           env: ['900059', '900108'],
-//         },
-//       ],
-//     },
-//     {
-//       name: 'penn foster',
-//       version: [
-//         { name: '23.1', env: ['900059', '900108'] },
-//         { name: '22.5', env: ['900059', '900108'] },
-//       ],
-//     },
-//   ],
-// }
-
-const dropdown = {
-  marginTop: '20vh',
-
-  minWidth: '12em',
-  position: 'relative',
-  display: 'inline-block',
-  marginRight: '1em',
-  minHeight: '2em',
-  maxHeight: '2em',
-  overflow: 'hidden',
-  top: '.5em',
-  cursor: 'pointer',
-  textAlign: 'left',
-  whiteSpace: 'nowrap',
-  color: '#444',
-  outline: 'none',
-  border: '.06em solid transparent',
-  borderRadius: '1em',
-  // background-color: mix($color,#fff,25%);
-}
-
-export default function StudentWebClientPerformance() {
+const StudentWebClientPerformance = () => {
   const [selectedTestPlan, setSelectedTestPlan] = React.useState('')
   const [selectedVersions, setSelectedVersions] = React.useState('')
   const [selectedEnvs, setSelectedEnvs] = React.useState('')
   const [userData, setUserData] = React.useState([])
-  // const [loading, setLoading] = useState(false)
   const [showComponent, setShowComponent] = useState(false)
-  const [getusers, setUsers] = useState({})
+  const [getUsers, setUsers] = useState({})
 
-  const handleClick = () => setShowComponent(true)
+  const handleClick = () => {
+    setShowComponent(true)
+  }
   // const disableHandleClick = () => setShowComponent(false) //hides component if shown, reveals if not shown
 
   useEffect(() => {
@@ -153,12 +120,10 @@ export default function StudentWebClientPerformance() {
         // debugger;
         const jsonData = await response.json()
         // debugger;
-        console.log({ jsonData }, 'check')
+        // console.log({ jsonData }, 'check')
 
         setUsers(jsonData)
         // console.log(loading);
-        // setLoading(true)
-        // return jsonData;
       })
       .catch((error) => {
         // debugger;
@@ -218,11 +183,17 @@ export default function StudentWebClientPerformance() {
   )
 
   function SubmitButton() {
-    if (selectedTestPlan && selectedVersions && selectedEnvs && getusers) {
+    if (selectedTestPlan && selectedVersions && selectedEnvs && getUsers) {
+      setTimeout(2000)
       return (
-        <button type='button' onClick={handleClick}>
+        <Button
+          style={{ width: 120 }}
+          variant='contained'
+          type='button'
+          onClick={handleClick}
+        >
           Show Data
-        </button>
+        </Button>
       )
     } else if (
       selectedTestPlan == setSelectedTestPlan &&
@@ -230,22 +201,34 @@ export default function StudentWebClientPerformance() {
       selectedEnvs == setSelectedEnvs
     ) {
       return (
-        <button type='button' disabled>
+        <Button
+          variant='contained'
+          style={{ width: 120 }}
+          type='button'
+          onClick={handleClick}
+          disabled
+        >
           Show Data
-        </button>
+        </Button>
       )
     } else {
       return (
-        <button type='button' disabled>
+        <Button
+          variant='contained'
+          style={{ width: 120 }}
+          type='button'
+          onClick={handleClick}
+          disabled
+        >
           Show Data
-        </button>
+        </Button>
       )
     }
   }
-  console.log(getusers.lastTenTestRunDetail, 'showcomponent checks')
+  // console.log(getUsers.lastTenTestRunDetail, 'showcomponent checks')
 
   const Zscore_chart = {
-    labels: Object.keys(getusers).length > 0 ? getusers.graph.zScore.date : [],
+    labels: Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.date : [],
     title: 'Zscore',
     datasets: [
       {
@@ -268,13 +251,13 @@ export default function StudentWebClientPerformance() {
         pointRadius: 1,
         pointHitRadius: 10,
         data:
-          Object.keys(getusers).length > 0 ? getusers.graph.zScore.value : [],
+          Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.value : [],
       },
     ],
   }
   const avg_response_chart = {
     labels:
-      Object.keys(getusers).length > 0 ? getusers.graph.avgResponse.date : [],
+      Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.date : [],
     datasets: [
       {
         label: 'Average Response',
@@ -296,8 +279,8 @@ export default function StudentWebClientPerformance() {
         pointRadius: 1,
         pointHitRadius: 10,
         data:
-          Object.keys(getusers).length > 0
-            ? getusers.graph.avgResponse.avg
+          Object.keys(getUsers).length > 0
+            ? getUsers.graph.avgResponse.avg
             : [],
       },
     ],
@@ -340,250 +323,261 @@ export default function StudentWebClientPerformance() {
     },
   }
   const bar_data = {
-    labels: Object.keys(getusers).length > 0 ? getusers.graph.appDex.date : [],
+    labels: Object.keys(getUsers).length > 0 ? getUsers.graph.appDex.date : [],
     datasets: [
       {
         label: 'Satisfied', //green
         data:
-          Object.keys(getusers).length > 0
-            ? getusers.graph.appDex.satisfied
+          Object.keys(getUsers).length > 0
+            ? getUsers.graph.appDex.satisfied
             : [],
         backgroundColor: 'rgb(75, 192, 192)',
       },
       {
         label: 'Tolerating', //yellow
         data:
-          Object.keys(getusers).length > 0
-            ? getusers.graph.appDex.tolerating
+          Object.keys(getUsers).length > 0
+            ? getUsers.graph.appDex.tolerating
             : [],
         backgroundColor: 'rgb(255, 230, 120)',
       },
       {
         label: 'Frustrated', //red
         data:
-          Object.keys(getusers).length > 0
-            ? getusers.graph.appDex.frustrated
+          Object.keys(getUsers).length > 0
+            ? getUsers.graph.appDex.frustrated
             : [],
         backgroundColor: 'rgb(255, 99, 132)',
       },
     ],
   }
 
-  console.log(selectedTestPlan, 'ssss')
-  const style_paper = {
-    height: 150,
-    width: 1250,
-    textAlign: 'center',
-    rounded: true,
-    paddingTop: 65,
-    backgroundColor: '#ffffff',
-    opacity: 0.8,
-    margin: 'auto',
-  }
+  // console.log(selectedTestPlan, 'ssss')
 
   return (
-    <div>
-      <h2>
-        {' '}
-        <center> Student Web Client - Performance Summary </center>{' '}
-      </h2>
-      {/* <Paper 
-      style={style_paper}
-      > */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          margin: '0px 5px',
-          position: 'relative',
+    <Grid>
+      <Grid container rowSpacing={4.5} columnSpacing={1}>
+        {/* row 1 */}
+        <Grid item xs={12} sx={{ mb: -2.25 }}>
+          <Typography variant='h5'>Search Query</Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2} lg={3}>
+          <FormControl>
+            <InputLabel id='demo-simple-select-label'>TestPlan</InputLabel>
 
-          // padding: '20px',
-        }}
-      >
-        <div
-          style={{
-            marginTop: '20px',
-          }}
-        >
-          <label>
-            {' '}
-            TestPlan
-            <select
-              placeholder='TestPlan'
-              style={{ dropdown }}
-              // style={{
-              //   textAlign: 'center',
-              //   display: 'grid',
-              //   placeItems: 'center',
-              //   fontFamily: 'Arial, Helvetica',
-              // }}
+            <Select
               value={selectedTestPlan}
+              style={{ width: 180 }}
+              placeholder='TestPlan'
               onChange={(e) => (
                 setSelectedTestPlan(e.target.value), setShowComponent(false)
               )}
             >
-              <option>Choose Testplan</option>
               {fullResult.testplan.map((value, key) => {
                 return (
-                  <option value={value.name} key={key}>
+                  <MenuItem value={value.name} key={key}>
                     {value.name}
-                  </option>
+                  </MenuItem>
                 )
               })}
-            </select>
-          </label>
-        </div>
-        <br />
-        <div
-        // style={{
-        //   height: '70px',
-        //   width: '200px',
-        //   display: 'inline-block',
-        //   padding: '0px 4px',
-        // }}
-        >
-          Versions
-          <select
-            placeholder='Version'
-            value={selectedVersions}
-            style={{
-              marginTop: '20px',
-            }}
-            //   display: 'grid',
-            //   placeItems: 'center',
-            //   fontFamily: 'Arial, Helvetica',
-            // }}
-            onChange={(e) => (
-              setSelectedVersions(e.target.value), setShowComponent(false)
-            )}
-          >
-            <option>Choose Version</option>
-            {availableVersions?.versions.map((e, key) => {
-              return (
-                <option value={e.name} key={key}>
-                  {e.name}
-                </option>
-              )
-            })}
-          </select>
-        </div>
-        <div
-        // style={{
-        //   height: '70px',
-        //   width: '200px',
-        //   display: 'inline-block',
-        //   padding: '0px 4px',
-        // }}
-        >
-          Environments
-          <select
-            placeholder='Envs'
-            style={{
-              marginTop: '20px',
-            }}
-            //   display: 'grid',
-            //   placeItems: 'center',
-            //   fontFamily: 'Arial, Helvetica',
-            // }}
-            value={selectedEnvs}
-            onChange={(e) => (
-              setSelectedEnvs(e.target.value), setShowComponent(false)
-            )}
-          >
-            <option>Choose Envs</option>
-            {availableEnvs?.environment.map((e, key) => {
-              return (
-                <option value={e.name} key={key}>
-                  {e}
-                </option>
-              )
-            })}
-          </select>
-        </div>
-        <div
-          style={{
-            marginTop: '20px',
-          }}
-          //   display: 'grid',
-          //   placeItems: 'center',
-          //   fontFamily: 'Arial, Helvetica',
-          // }}
-        >
-          <SubmitButton />
-        </div>
-      </div>
-      {/* </Paper> */}
-      {selectedTestPlan && selectedVersions && selectedEnvs && getusers ? (
-        <p>
-          {' '}
-          Selected Test Results : {selectedTestPlan}/{selectedVersions}/
-          {selectedEnvs}{' '}
-        </p>
-      ) : (
-        ''
-      )}
-      {showComponent ? (
-        <>
-          <div
-            style={{
-              height: '250px',
-              width: '450px',
-              margin: 0,
-              display: 'flex',
-            }}
-          >
-            <Line option={Line_options_zscore} data={Zscore_chart} />
-            <Line
-              option={Line_options_avg_response}
-              data={avg_response_chart}
-            />
-            <Bar options={bar_options} data={bar_data} />
-          </div>
-          <div>
-            <h3> Last 5 Performance Test Run Details </h3>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 550 }} aria-label='simple table'>
-                <TableHead text='Last Ten Test Run Details'>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell align='right'>Average Response Time</TableCell>
-                    <TableCell align='right'>
-                      90 Percentile response time
-                    </TableCell>
-                    <TableCell align='right'>Virtual Users</TableCell>
-                    <TableCell align='right'>Error Percentage</TableCell>
-                    {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {getusers.lastTenTestRunDetail.map((row) => (
-                    <TableRow>
-                      <TableCell component='th' scope='row'>
-                        {row.date}
-                      </TableCell>
-                      <TableCell align='right'>{row.avgResponseTime}</TableCell>
-                      {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
-                      <TableCell align='right'>
-                        {row['90PercentileResponseTime']}
-                      </TableCell>
-                      <TableCell align='right'>{row.virtualUsers}</TableCell>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <FormControl>
+            <InputLabel id='demo-simple-select-label'>Version</InputLabel>
 
-                      <TableCell align='right'>
-                        {row.errorsPercentage}
-                      </TableCell>
-                      {/* <TableCell align='right'>
+            <Select
+              placeholder='Version'
+              style={{ width: 120 }}
+              value={selectedVersions}
+              onChange={(e) => (
+                setSelectedVersions(e.target.value), setShowComponent(false)
+              )}
+            >
+              {availableVersions?.versions.map((e, key) => {
+                return (
+                  <MenuItem value={e.name} key={key}>
+                    {e.name}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <FormControl>
+            <InputLabel id='demo-simple-select-label'>Environment</InputLabel>
+
+            <Select
+              placeholder='Envs'
+              style={{ width: 120 }}
+              value={selectedEnvs}
+              onChange={(e) => (
+                setSelectedEnvs(e.target.value), setShowComponent(false)
+              )}
+            >
+              {availableEnvs?.environment.map((e, key) => {
+                return (
+                  <MenuItem value={e} key={key}>
+                    {e}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <SubmitButton />
+        </Grid>
+      </Grid>
+      <Divider style={{ gap: 15 }} />
+
+      <Grid container rowSpacing={4.5} columnSpacing={1}>
+        {/* row 2 */}
+        {selectedTestPlan && selectedVersions && selectedEnvs && getUsers ? (
+          <Grid item xs={12}>
+            <Typography variant='h6'>
+              Selected Test Results : {selectedTestPlan}/{selectedVersions}/
+              {selectedEnvs}
+            </Typography>
+          </Grid>
+        ) : (
+          ''
+        )}
+        {showComponent ? (
+          <>
+            <Divider />
+
+            <Grid item xs={12} md={5} lg={4}>
+              <Grid
+                container
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Grid item>
+                  <Typography variant='h5'>Zscore Result</Typography>
+                </Grid>
+              </Grid>
+              <MainCard content={false} sx={{ mt: 1.5 }}>
+                <Box sx={{ pt: 1, pr: 2 }}>
+                  <Line option={Line_options_zscore} data={Zscore_chart} />
+
+                  {/* <IncomeAreaChart slot={slot} /> */}
+                </Box>
+              </MainCard>
+            </Grid>
+            <Grid item xs={12} md={5} lg={4}>
+              <Grid
+                container
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Grid item>
+                  <Typography variant='h5'>Average Response</Typography>
+                </Grid>
+                <Grid item />
+              </Grid>
+              <MainCard sx={{ mt: 2 }} content={false}>
+                {/* <Box sx={{ p: 3, pb: 0 }}>
+            <Stack spacing={2}>
+              <Typography variant='h6' color='textSecondary'>
+                This Week Statistics
+              </Typography>
+              <Typography variant='h3'>$7,650</Typography>
+            </Stack>
+          </Box> */}
+                <Line
+                  option={Line_options_avg_response}
+                  data={avg_response_chart}
+                />{' '}
+              </MainCard>
+            </Grid>
+
+            <Grid item xs={12} md={5} lg={4}>
+              <Grid
+                container
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Grid item>
+                  <Typography variant='h5'>Appdex</Typography>
+                </Grid>
+                <Grid item />
+              </Grid>
+              <MainCard sx={{ mt: 2 }} content={false}>
+                <Bar options={bar_options} data={bar_data} />
+              </MainCard>
+            </Grid>
+            <Grid item xs={12} md={5} lg={8}>
+              <Grid
+                container
+                alignItems='center'
+                justifyContent='space-between'
+              >
+                <Grid item>
+                  <Typography variant='h5'>
+                    Last 5 Performance Test Run Details{' '}
+                  </Typography>
+                </Grid>
+                <Grid item />
+              </Grid>
+              <MainCard sx={{ mt: 2 }} content={false}>
+                <TableContainer component={Paper}>
+                  <Table aria-label='simple table'>
+                    <TableHead text='Last Ten Test Run Details'>
+                      <TableRow>
+                        <TableCell>Date</TableCell>
+                        <TableCell align='right'>
+                          Average Response Time
+                        </TableCell>
+                        <TableCell align='right'>
+                          90 Percentile response time
+                        </TableCell>
+                        <TableCell align='right'>Virtual Users</TableCell>
+                        <TableCell align='right'>Error Percentage</TableCell>
+                        {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {getUsers.lastTenTestRunDetail.map((row) => (
+                        <TableRow>
+                          <TableCell component='th' scope='row'>
+                            {row.date}
+                          </TableCell>
+                          <TableCell align='right'>
+                            {row.avgResponseTime}
+                          </TableCell>
+                          {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
+                          <TableCell align='right'>
+                            {row['90PercentileResponseTime']}
+                          </TableCell>
+                          <TableCell align='right'>
+                            {row.virtualUsers}
+                          </TableCell>
+
+                          <TableCell align='right'>
+                            {row.errorsPercentage}
+                          </TableCell>
+                          {/* <TableCell align='right'>
                         {row.testDetailFilePath}
                       </TableCell> */}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        </>
-      ) : (
-        ''
-      )}
-    </div>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </MainCard>
+            </Grid>
+          </>
+        ) : (
+          ''
+        )}
+
+        {/* row 4 */}
+      </Grid>
+    </Grid>
   )
 }
+
+export default StudentWebClientPerformance
