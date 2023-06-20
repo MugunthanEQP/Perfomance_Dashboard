@@ -78,7 +78,7 @@ const Home = () => (
               <Divider />
             </Stack>
           </MainCard>
-          <MainCard title='Engagement' codeHighlight>
+          <MainCard title='Engagement'>
             <Stack spacing={3}>
               <Box
                 sx={{
