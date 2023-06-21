@@ -5,7 +5,6 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
 import Chart from 'react-apexcharts'
 // material-ui
 import { Grid, Divider, Typography } from '@mui/material'
@@ -168,9 +167,9 @@ const StudentWebClientPerformance = () => {
         </Button>
       )
     } else if (
-      selectedTestPlan == setSelectedTestPlan &&
-      selectedVersions == setSelectedVersions &&
-      selectedEnvs == setSelectedEnvs
+      selectedTestPlan === setSelectedTestPlan &&
+      selectedVersions === setSelectedVersions &&
+      selectedEnvs === setSelectedEnvs
     ) {
       return (
         <Button
