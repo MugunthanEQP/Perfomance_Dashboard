@@ -6,28 +6,11 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
+import Chart from 'react-apexcharts'
 // material-ui
-import {
-  Grid,
-  Divider,
-  Typography,
-} from '@mui/material'
-
+import { Grid, Divider, Typography } from '@mui/material'
 import MainCard from './../../../components/MainCard'
 
-
-import {
-  Chart as ChartJS,
-  PointElement,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js'
-import { Line, Bar } from 'react-chartjs-2'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -35,17 +18,6 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  BarElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-)
 
 function parseXML(text) {
   if (window.DOMParser) {
@@ -225,134 +197,151 @@ const StudentWebClientPerformance = () => {
       )
     }
   }
-  // console.log(getUsers.lastTenTestRunDetail, 'showcomponent checks')
 
-  const Zscore_chart = {
-    labels: Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.date : [],
-    title: 'Zscore',
-    datasets: [
-      {
-        label: 'Zscore Results',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(75,192,192,1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'round',
-        pointBorderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        pointHoverBorderColor: 'rgba(220,220,220,1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data:
-          Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.value : [],
-      },
-    ],
-  }
-  const avg_response_chart = {
-    labels:
-      Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.date : [],
-    datasets: [
-      {
-        label: 'Average Response',
-        fill: false,
-        lineTension: 0.1,
-        backgroundColor: 'rgba(255, 99, 132, 1)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'round',
-        pointBorderColor: 'rgba(255, 99, 132, 1)',
-        pointBackgroundColor: '#fff',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: 'rgba(255, 99, 132, 1)',
-        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-        pointHoverBorderWidth: 2,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        data:
-          Object.keys(getUsers).length > 0
-            ? getUsers.graph.avgResponse.avg
-            : [],
-      },
-    ],
-  }
-
-  const Line_options_zscore = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Zscore',
-      },
+  const apexLineZscoreOptions = {
+    chart: {
+      height: 250,
+      type: 'area',
     },
-    responsive: true,
-  }
-
-  const Line_options_avg_response = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'Average Response',
-      },
+    dataLabels: {
+      enabled: false,
     },
-    responsive: true,
-  }
-  const bar_options = {
-    plugins: {
-      title: {
-        display: true,
-        text: 'App dex',
-      },
+    stroke: {
+      curve: 'smooth',
     },
-    responsive: true,
-    scales: {
+    xaxis: {
+      type: 'date',
+      categories:
+        Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.date : [],
+    },
+    tooltip: {
       x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
+        format: 'MM/dd/yy',
       },
     },
   }
-  const bar_data = {
-    labels: Object.keys(getUsers).length > 0 ? getUsers.graph.appDex.date : [],
-    datasets: [
-      {
-        label: 'Satisfied', //green
-        data:
-          Object.keys(getUsers).length > 0
-            ? getUsers.graph.appDex.satisfied
-            : [],
-        backgroundColor: 'rgb(75, 192, 192)',
+
+  const apexLineZscoreSeries = [
+    {
+      name: 'Zscore>1',
+      data: Object.keys(getUsers).length > 0 ? getUsers.graph.zScore.value : [],
+    },
+  ]
+
+  const apexLineAverageResponseOptions = {
+    chart: {
+      height: 250,
+      type: 'area',
+    },
+    theme: {
+      palette: 'palette2', // upto palette10
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    xaxis: {
+      type: 'date',
+      categories:
+        Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.date : [],
+    },
+    tooltip: {
+      x: {
+        format: 'MM/dd/yy',
       },
-      {
-        label: 'Tolerating', //yellow
-        data:
-          Object.keys(getUsers).length > 0
-            ? getUsers.graph.appDex.tolerating
-            : [],
-        backgroundColor: 'rgb(255, 230, 120)',
-      },
-      {
-        label: 'Frustrated', //red
-        data:
-          Object.keys(getUsers).length > 0
-            ? getUsers.graph.appDex.frustrated
-            : [],
-        backgroundColor: 'rgb(255, 99, 132)',
-      },
-    ],
+    },
   }
 
-  // console.log(selectedTestPlan, 'ssss')
+  const apexLineAverageResponseSeries = [
+    {
+      name: 'Appdex',
+      data:
+        Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.avg : [],
+    },
+  ]
+
+  const apexBarAppdexOptions = {
+    colors: ['#008450', '#EFB700', '#B81D13'],
+    chart: {
+      type: 'bar',
+      height: 350,
+      stacked: true,
+      toolbar: {
+        show: true,
+      },
+      zoom: {
+        enabled: true,
+      },
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          legend: {
+            position: 'bottom',
+            offsetX: -10,
+            offsetY: 0,
+          },
+        },
+      },
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 1,
+        dataLabels: {
+          total: {
+            enabled: false,
+            style: {
+              fontSize: '13px',
+              fontWeight: 300,
+            },
+          },
+        },
+      },
+    },
+    xaxis: {
+      type: 'date',
+      categories:
+        Object.keys(getUsers).length > 0 ? getUsers.graph.appDex.date : [],
+    },
+    legend: {
+      position: 'bottom',
+      offsetY: 5,
+    },
+    fill: {
+      opacity: 1,
+    },
+  }
+
+  const apexBarAppdexSeries = [
+    {
+      name: 'Satisfied',
+      data:
+        Object.keys(getUsers).length > 0 ? getUsers.graph.appDex.satisfied : [],
+    },
+    {
+      name: 'Tolerating',
+      data:
+        Object.keys(getUsers).length > 0
+          ? getUsers.graph.appDex.tolerating
+          : [],
+    },
+    {
+      name: 'Frustrated',
+      data:
+        Object.keys(getUsers).length > 0
+          ? getUsers.graph.appDex.frustrated
+          : [],
+    },
+  ]
+
+  console.log(
+    Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.value : [],
+    'ssss'
+  )
 
   return (
     <Grid>
@@ -448,7 +437,6 @@ const StudentWebClientPerformance = () => {
         {showComponent ? (
           <>
             <Divider />
-
             <Grid item xs={12} md={5} lg={4}>
               <Grid
                 container
@@ -461,9 +449,12 @@ const StudentWebClientPerformance = () => {
               </Grid>
               <MainCard content={false} sx={{ mt: 1.5 }}>
                 <Box sx={{ pt: 1, pr: 2 }}>
-                  <Line option={Line_options_zscore} data={Zscore_chart} />
-
-                  {/* <IncomeAreaChart slot={slot} /> */}
+                  <Chart
+                    options={apexLineZscoreOptions}
+                    series={apexLineZscoreSeries}
+                    type='area'
+                    height={350}
+                  />
                 </Box>
               </MainCard>
             </Grid>
@@ -479,21 +470,14 @@ const StudentWebClientPerformance = () => {
                 <Grid item />
               </Grid>
               <MainCard sx={{ mt: 2 }} content={false}>
-                {/* <Box sx={{ p: 3, pb: 0 }}>
-            <Stack spacing={2}>
-              <Typography variant='h6' color='textSecondary'>
-                This Week Statistics
-              </Typography>
-              <Typography variant='h3'>$7,650</Typography>
-            </Stack>
-          </Box> */}
-                <Line
-                  option={Line_options_avg_response}
-                  data={avg_response_chart}
-                />{' '}
+                <Chart
+                  options={apexLineAverageResponseOptions}
+                  series={apexLineAverageResponseSeries}
+                  type='area'
+                  height={350}
+                />
               </MainCard>
             </Grid>
-
             <Grid item xs={12} md={5} lg={4}>
               <Grid
                 container
@@ -506,7 +490,12 @@ const StudentWebClientPerformance = () => {
                 <Grid item />
               </Grid>
               <MainCard sx={{ mt: 2 }} content={false}>
-                <Bar options={bar_options} data={bar_data} />
+                <Chart
+                  options={apexBarAppdexOptions}
+                  series={apexBarAppdexSeries}
+                  type='bar'
+                  height={350}
+                />
               </MainCard>
             </Grid>
             <Grid item xs={12} md={5} lg={8}>
@@ -559,9 +548,6 @@ const StudentWebClientPerformance = () => {
                           <TableCell align='right'>
                             {row.errorsPercentage}
                           </TableCell>
-                          {/* <TableCell align='right'>
-                        {row.testDetailFilePath}
-                      </TableCell> */}
                         </TableRow>
                       ))}
                     </TableBody>
@@ -573,8 +559,6 @@ const StudentWebClientPerformance = () => {
         ) : (
           ''
         )}
-
-        {/* row 4 */}
       </Grid>
     </Grid>
   )
