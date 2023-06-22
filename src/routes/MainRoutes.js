@@ -18,6 +18,10 @@ const SwcPerformance = Loadable(
   )
 )
 
+const DetailSummary = Loadable(
+  lazy(() => import('./../pages/home/student_web_client/DetailSummary'))
+)
+
 // render - utilities
 // const Typography = Loadable(
 //   lazy(() => import('./../pages/components-overview/Typography'))
@@ -46,19 +50,24 @@ const MainRoutes = {
       path: 'swcperformance',
       element: <SwcPerformance />,
     },
+
+    {
+      path: 'detailsummary',
+      element: <DetailSummary />,
+    },
     // {
     //   path: 'color',
     //   element: <Color />,
     // },
-    // {
-    //   path: 'dashboard',
-    //   children: [
-    //     {
-    //       path: 'default',
-    //       element: <Home />,
-    //     },
-    //   ],
-    // },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'default',
+          element: <Home />,
+        },
+      ],
+    },
     // {
     //   path: 'sample-page',
     //   element: <SamplePage />,
