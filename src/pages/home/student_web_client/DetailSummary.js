@@ -283,34 +283,27 @@ const DetailSummary = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2.3}>
               <AnalyticEcommerce
-                title='Average Throughput'
+                title='Average Throughput(Hits/s)'
                 count={detailData.summaryData.avgThroughput}
-                extra='Hits/s'
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2.3}>
               <AnalyticEcommerce
-                title='Average Response Time'
+                title='Average Response Time(Ms)'
                 count={detailData.summaryData.avgResponseTime}
-                extra='Milliseconds'
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2.3}>
               <AnalyticEcommerce
-                title='90% Response Time'
+                title='90% Response Time(Ms)'
                 count={detailData.summaryData['90PercentileResponseTime']}
-                isLoss
-                // color='warning'
-                extra='Milliseconds'
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2.3}>
               <AnalyticEcommerce
-                title='Error Rate'
+                title='Error Rate(%)'
                 count={detailData.summaryData.errorsPercentage}
-                isLoss
                 // color='warning'
-                extra='%'
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={2.3}>
@@ -319,7 +312,6 @@ const DetailSummary = () => {
                 count={detailData.summaryData.virtualUsers}
                 isLoss
                 // color='warning'
-                extra='%'
               />
             </Grid>
           </Grid>
