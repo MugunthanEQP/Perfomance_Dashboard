@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -33,6 +34,8 @@ const StudentWebClientPerformance = () => {
   const [userData, setUserData] = React.useState([])
   const [showComponent, setShowComponent] = useState(false)
   const [getUsers, setUsers] = useState({})
+
+  const navigate = useNavigate()
 
   const handleClick = () => {
     setShowComponent(true)
@@ -155,7 +158,6 @@ const StudentWebClientPerformance = () => {
 
   function SubmitButton() {
     if (selectedTestPlan && selectedVersions && selectedEnvs && getUsers) {
-      setTimeout(2000)
       return (
         <Button
           style={{ width: 120 }}
@@ -342,12 +344,19 @@ const StudentWebClientPerformance = () => {
     'ssss'
   )
 
+  const navigateToDetail = (post) => {
+    setTimeout(() => {
+      navigate('/detailsummary', { state: post })
+    }, 0.5)
+    // here we will redirect user and send your data into state
+  }
+
   return (
     <Grid>
       <Grid container rowSpacing={4.5} columnSpacing={1}>
         {/* row 1 */}
         <Grid item xs={12} sx={{ mb: -2.25 }}>
-          <Typography variant='h5'>Search Query</Typography>
+          <Typography variant='h5'>Search Querying</Typography>
         </Grid>
         <Grid item xs={12} sm={6} md={2} lg={3}>
           <FormControl>
@@ -530,8 +539,14 @@ const StudentWebClientPerformance = () => {
                     <TableBody>
                       {getUsers.lastTenTestRunDetail.map((row) => (
                         <TableRow>
-                          <TableCell component='th' scope='row'>
-                            {row.date}
+                          <TableCell
+                            component='th'
+                            scope='row'
+                            onClick={() =>
+                              navigateToDetail(row.testDetailFilePath)
+                            }
+                          >
+                            <Button> {row.date}</Button>
                           </TableCell>
                           <TableCell align='right'>
                             {row.avgResponseTime}
