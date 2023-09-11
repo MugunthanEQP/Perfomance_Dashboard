@@ -48,7 +48,7 @@ const DetailSummary = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  console.log(detailData, 'ksksksk')
+  // console.log(detailData, 'ksksksk')
 
   const timelineConcurrentUsersandHitsOptions = {
     chart: {

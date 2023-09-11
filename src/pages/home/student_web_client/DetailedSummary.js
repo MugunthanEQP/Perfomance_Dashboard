@@ -77,7 +77,7 @@ const DetailedSummary = () => {
       .finally(() => setLoading(false))
   }, [])
 
-  console.log(detailData, 'ksksksk')
+  // console.log(detailData, 'ksksksk')
 
   const slowResponseOptions = {
     chart: {

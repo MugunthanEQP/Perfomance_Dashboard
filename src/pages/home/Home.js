@@ -20,9 +20,11 @@ const Home = () => (
     <Grid container spacing={3}>
       <Grid item xs={12} lg={8}>
         <Stack spacing={3} direction='row'>
+          
           <MainCard title='Operations'>
             <Stack spacing={3}>
               <Typography variant='h5'>Student Web Client</Typography>
+              
               <Stack
                 direction='row'
                 spacing={3}
@@ -33,11 +35,24 @@ const Home = () => (
                 alignItems='center'
                 flexWrap='wrap'
               >
-                <Button variant='contained' href='/swcperformance'>
+                {/* <Button variant='contained' href='/swcperformance'>
                   Performance
                 </Button>
                 <Button variant='contained'>UnitTest</Button>
-                <Button variant='contained'>Sonarqube</Button>
+                <Button variant='contained'>Sonarqube</Button> */}
+                <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' href='/swcperformance' fullWidth >
+                    Performance
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary" fullWidth disableElevation>UnitTest</Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary" fullWidth disableElevation>Sonarqube</Button>
+                </Grid>
+              </Grid>
               </Stack>
               <Divider />
 
@@ -52,9 +67,19 @@ const Home = () => (
                 alignItems='center'
                 flexWrap='wrap'
               >
-                <Button variant='contained'>Performance</Button>
-                <Button variant='contained'>UnitTest</Button>
-                <Button variant='contained'>Sonarqube</Button>
+                <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary" fullWidth disableElevation>
+                    Performance
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary"fullWidth disableElevation>UnitTest</Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained'color="secondary" fullWidth disableElevation>Sonarqube</Button>
+                </Grid>
+              </Grid>
               </Stack>
               <Divider />
 
@@ -69,9 +94,19 @@ const Home = () => (
                 alignItems='center'
                 flexWrap='wrap'
               >
-                <Button variant='contained'>Performance</Button>
-                <Button variant='contained'>UnitTest</Button>
-                <Button variant='contained'>Sonarqube</Button>
+                <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary" fullWidth disableElevation>
+                    Performance
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained' color="secondary" fullWidth disableElevation>UnitTest</Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <Button variant='contained'color="secondary" fullWidth disableElevation>Sonarqube</Button>
+                </Grid>
+              </Grid>
               </Stack>
               <Divider />
             </Stack>
