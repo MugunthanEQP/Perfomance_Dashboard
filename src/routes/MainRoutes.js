@@ -1,31 +1,31 @@
-import { lazy } from 'react';
-import Loadable from './../components/Loadable';
-import MainLayout from './../layout/MainLayout';
+import { lazy } from "react";
+import Loadable from "./../components/Loadable";
+import MainLayout from "./../layout/MainLayout";
 
-const Home = Loadable(lazy(() => import('./../pages/home/Home')));
+const Home = Loadable(lazy(() => import("./../pages/home/Home")));
 const SwcPerformance = Loadable(
   lazy(() =>
-    import('./../pages/home/student_web_client/StudentWebClientPerformance')
+    import("./../pages/home/student_web_client/StudentWebClientPerformance")
   )
 );
 const DetailSummary = Loadable(
-  lazy(() => import('./../pages/home/student_web_client/DetailSummary'))
+  lazy(() => import("./../pages/home/student_web_client/DetailSummary"))
 );
 
 const MainRoutes = {
-  path: '/',
+  path: "/",
   element: <MainLayout />,
   children: [
     {
-      path: '/',
+      path: "/",
       element: <Home />,
     },
     {
-      path: 'swcperformance',
+      path: "swcperformance",
       element: <SwcPerformance />,
     },
     {
-      path: 'detailsummary',
+      path: "detailsummary",
       element: <DetailSummary />,
     },
   ],

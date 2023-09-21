@@ -1,61 +1,49 @@
 // project import
-import AppBarStyled from './AppBarStyled';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
-import { AppBar, IconButton, Toolbar, useMediaQuery, Button } from '@mui/material';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { useMsal } from '@azure/msal-react';
+import AppBarStyled from "./AppBarStyled";
+import React from "react";
+import PropTypes from "prop-types";
+import { useTheme } from "@mui/material/styles";
+import { AppBar, IconButton, Toolbar, useMediaQuery, Box } from "@mui/material";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
+import HeaderContent from "./HeaderContent";
 
 const Header = ({ open, handleDrawerToggle }) => {
   const theme = useTheme();
-  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
-  const { instance } = useMsal();
+  const matchDownMD = useMediaQuery(theme.breakpoints.down("lg"));
 
-
-  const iconBackColor = 'grey.100';
-  const iconBackColorOpen = 'grey.200';
-
-  const handleLogout = () => {
-    // Perform logout logic here
-    // For example, clear user session, remove tokens, etc.
-    // Then navigate to the login page
-    // window.location.href = '/';
-    instance.logout();
-
-  };
+  const iconBackColor = "grey.100";
+  const iconBackColorOpen = "grey.200";
 
   const mainHeader = (
     <Toolbar>
-      <IconButton
-        disableRipple
-        aria-label="open drawer"
-        onClick={handleDrawerToggle}
-        edge="start"
-        color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
-      >
-        {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </IconButton>
-
-      {/* Add the login button */}
-      <div >
-      <Button style={{ display: 'flex',position:'relative', left:'1500px'}} color="secondary" onClick={handleLogout}>
-        Logout
-        
-      </Button>
-    </div>
+      <Box sx={{ flexGrow: 1 }}>
+        <IconButton
+          disableRipple
+          aria-label="open drawer"
+          onClick={handleDrawerToggle}
+          edge="start"
+          color="secondary"
+          sx={{
+            color: "text.primary",
+            bgcolor: open ? iconBackColorOpen : iconBackColor,
+            ml: { xs: 0, lg: -2 },
+          }}
+        >
+          {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </IconButton>
+      </Box>
+      <HeaderContent />
     </Toolbar>
   );
 
   const appBar = {
-    position: 'fixed',
-    color: 'inherit',
+    position: "fixed",
+    color: "inherit",
     elevation: 0,
     sx: {
-      borderBottom: `1px solid ${theme.palette.divider}`
-    }
+      borderBottom: `1px solid ${theme.palette.divider}`,
+    },
   };
 
   return (
@@ -73,7 +61,7 @@ const Header = ({ open, handleDrawerToggle }) => {
 
 Header.propTypes = {
   open: PropTypes.bool,
-  handleDrawerToggle: PropTypes.func
+  handleDrawerToggle: PropTypes.func,
 };
 
 export default Header;
