@@ -49,7 +49,7 @@ const DetailSummary = () => {
       .then(async (response) => {
         const jsonData = await response.json();
         setDetailData(jsonData);
-        // console.log(loading);
+        console.log(loading, jsonData, url);
       })
       .catch((error) => {
         // debugger;

@@ -12,6 +12,10 @@ const DetailSummary = Loadable(
   lazy(() => import("./../pages/home/student_web_client/DetailSummary"))
 );
 
+const UpdatedSummary = Loadable(
+  lazy(() => import("./../pages/home/student_web_client/UpdatedSummary"))
+);
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
@@ -27,6 +31,10 @@ const MainRoutes = {
     {
       path: "detailsummary",
       element: <DetailSummary />,
+    },
+    {
+      path: "updatedsummary",
+      element: <UpdatedSummary />,
     },
   ],
 };
