@@ -16,6 +16,10 @@ const UpdatedSummary = Loadable(
   lazy(() => import("./../pages/home/student_web_client/UpdatedSummary"))
 );
 
+const Pair = Loadable(
+  lazy(() => import("./../pages/home/student_web_client/Pair"))
+);
+
 const MainRoutes = {
   path: "/",
   element: <MainLayout />,
@@ -35,6 +39,10 @@ const MainRoutes = {
     {
       path: "updatedsummary",
       element: <UpdatedSummary />,
+    },
+    {
+      path: "pair",
+      element: <Pair />,
     },
   ],
 };

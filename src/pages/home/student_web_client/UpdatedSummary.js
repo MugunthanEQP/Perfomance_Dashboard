@@ -10,14 +10,22 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  Divider,
 } from "@mui/material";
-import Container from "@mui/material/Container";
-import { styled } from "@mui/material/styles";
+// import Container from "@mui/material/Container";
+// import { styled } from "@mui/material/styles";
 
 import Button from "@mui/material/Button";
 import Chart from "react-apexcharts";
 // material-ui
-import { Grid, Divider, Typography, Stack, Breadcrumbs } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Stack,
+  Breadcrumbs,
+  CardContent,
+  Card,
+} from "@mui/material";
 import MainCard from "./../../../components/MainCard";
 
 import Table from "@mui/material/Table";
@@ -26,12 +34,18 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
-import { IconButton } from "@mui/material";
+import { IconButton, Collapse } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import DetailSummary from "./DetailSummary";
+// import DetailSummary from "./DetailSummary";
 import { TailSpin } from "react-loader-spinner";
+
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import AnalyticEcommerce from "../../../components/cards/statistics/AnalyticEcommerce";
+import IconContext from "@ant-design/icons/lib/components/Context";
+// import HeaderContent from "../../../layout/MainLayout/Header/HeaderContent";
 
 function parseXML(text) {
   if (window.DOMParser) {
@@ -49,6 +63,11 @@ const StudentWebClientPerformance = () => {
   const [showComponent, setShowComponent] = useState(false);
   const [getUsers, setUsers] = useState({});
   const [selectedOption, setSelectedOption] = useState(""); // Initialize selectedOption state with an empty string
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [aggreePage, setAggreePage] = React.useState(0);
+  const [aggreeRowsPerPage, setAggreeRowsPerPage] = React.useState(5);
 
   const navigate = useNavigate();
 
@@ -64,9 +83,27 @@ const StudentWebClientPerformance = () => {
     setSelectedOption(event.target.value);
   };
 
-  const StyledContainer = styled(Container)({
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-  });
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const aggreehandleChangePage = (event, newPage) => {
+    setAggreePage(newPage);
+  };
+
+  const aggreehandleChangeRowsPerPage = (event) => {
+    setAggreeRowsPerPage(+event.target.value);
+    setAggreePage(0);
+  };
+
+  // const StyledContainer = styled(Container)({
+  //   boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+  // });
   // const disableHandleClick = () => setShowComponent(false) //hides component if shown, reveals if not shown
 
   useEffect(() => {
@@ -102,45 +139,64 @@ const StudentWebClientPerformance = () => {
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
   }, []);
 
-  function fetchData() {
-    const url =
-      "https://load900108intstg.blob.core.windows.net/qadashboard/performance/student web client/" +
-      selectedTestPlan +
-      "/" +
-      selectedVersions +
-      "/" +
-      selectedEnvs +
-      "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
-    fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then(async (response) => {
-        // debugger;
-        const jsonData = await response.json();
-        // debugger;
-        // console.log({ jsonData }, "check");
-        console.log(
-          jsonData.lastTenTestRunDetail[0].testDetailFilePath,
-          "check"
-        );
-        setSelectedOption(jsonData.lastTenTestRunDetail[0].testDetailFilePath);
+  // function fetchData() {
+  //   const url =
+  //     "https://load900108intstg.blob.core.windows.net/qadashboard/performance/student web client/" +
+  //     selectedTestPlan +
+  //     "/" +
+  //     selectedVersions +
+  //     "/" +
+  //     selectedEnvs +
+  //     "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
+  //   fetch(url, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: "application/json",
+  //     },
+  //   })
+  //     .then(async (response) => {
+  //       const jsonData = await response.json();
+  //       setSelectedOption(jsonData.lastTenTestRunDetail[0].testDetailFilePath);
 
-        setUsers(jsonData);
-        // console.log(loading);
-      })
-      .catch((error) => {
-        // debugger;
-        setShowComponent(false);
-        // return Promise.reject(error)
-      });
-  }
+  //       setUsers(jsonData);
+  //     })
+  //     .catch((error) => {
+  //       // debugger;
+  //       setShowComponent(false);
+  //       // return Promise.reject(error)
+  //     });
+  // }
 
   useEffect(() => {
     if (selectedTestPlan && selectedEnvs && selectedVersions) {
-      return fetchData();
+      // return fetchData();
+      const url =
+        "https://load900108intstg.blob.core.windows.net/qadashboard/performance/student web client/" +
+        selectedTestPlan +
+        "/" +
+        selectedVersions +
+        "/" +
+        selectedEnvs +
+        "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      })
+        .then(async (response) => {
+          const jsonData = await response.json();
+          setSelectedOption(
+            jsonData.lastTenTestRunDetail[0].testDetailFilePath
+          );
+
+          setUsers(jsonData);
+        })
+        .catch((error) => {
+          // debugger;
+          setShowComponent(false);
+          // return Promise.reject(error)
+        });
     } else {
       return () => {};
     }
@@ -379,16 +435,14 @@ const StudentWebClientPerformance = () => {
     },
   ];
 
-  // console.log(
-  //   Object.keys(getUsers).length > 0 ? getUsers.graph.avgResponse.value : [],
-  //   "ssss"
-  // );
-
   const [detailData, setDetailData] = React.useState([]);
   const [loading, setLoading] = useState(false);
-  // console.log(selectedOption, "entered");
 
   useEffect(() => {
+    // debugger;
+    if (!selectedOption) {
+      return; // if selectedOption is not set, exit the useEffect
+    }
     setLoading(true);
     console.log(selectedOption, loading, "entered");
 
@@ -405,16 +459,14 @@ const StudentWebClientPerformance = () => {
       .then(async (response) => {
         const jsonData = await response.json();
         setDetailData(jsonData);
-        console.log(jsonData, "fetch check detail page");
+        // debugger;
+        console.log(setDetailData.length, "fetch check detail page");
       })
       .catch((error) => {
         // debugger;
-        // return Promise.reject(error)
-      });
-    // .finally(() => setLoading(false));
-  }, [selectedOption, loading]);
-
-  console.log(selectedOption, "radio");
+      })
+      .finally(() => setLoading(false));
+  }, [selectedOption]);
 
   const timelineConcurrentUsersandHitsOptions = {
     chart: {
@@ -455,7 +507,7 @@ const StudentWebClientPerformance = () => {
     //     Object.keys(detailData).length > 0
     //       ? detailData.graphData.concurrentUserByResponse.concurrentUsers
     //       : [],
-    // },
+    // }
   ];
   const timelineConcurrentUsersandLatencyOptions = {
     chart: {
@@ -612,18 +664,17 @@ const StudentWebClientPerformance = () => {
 
   return (
     <Grid>
-      <Grid container rowSpacing={2.5} columnSpacing={1}>
+      <Grid container style={{ gap: 15 }}>
         {/* row 1 */}
         <IconButton onClick={handleGoBack}>
           <ArrowBack />
         </IconButton>
-        <Grid item xs={12} sx={{ mb: -2.25 }} rowSpacing={4.5}>
+        {/* <Grid item xs={12} sx={{ mb: -2.25 }} rowSpacing={4.5}>
           <Typography variant="h5">Search Querying</Typography>
-        </Grid>
-        <Grid item xs={12} sm={6} md={2} lg={3}>
+        </Grid> */}
+        <Grid item xs={12} sm={6} md={2}>
           <FormControl>
-            <InputLabel id="demo-simple-select-label">TestPlan</InputLabel>
-
+            <InputLabel id="testplan">TestPlan</InputLabel>
             <Select
               value={selectedTestPlan}
               style={{ width: 180 }}
@@ -642,9 +693,9 @@ const StudentWebClientPerformance = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={2}>
           <FormControl>
-            <InputLabel id="demo-simple-select-label">Version</InputLabel>
+            <InputLabel id="version">Version</InputLabel>
 
             <Select
               placeholder="Version"
@@ -664,9 +715,9 @@ const StudentWebClientPerformance = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={2}>
           <FormControl>
-            <InputLabel id="demo-simple-select-label">Environment</InputLabel>
+            <InputLabel id="environment">Environment</InputLabel>
 
             <Select
               placeholder="Envs"
@@ -690,7 +741,7 @@ const StudentWebClientPerformance = () => {
           <SubmitButton />
         </Grid>
       </Grid>
-      <Divider variant="middle" style={{ margin: "15px 0" }} />
+      {/* <Divider variant="middle" style={{ margin: "15px 0" }} /> */}
       <Grid container rowSpacing={4.5} columnSpacing={1}>
         {/* row 2 */}
         {selectedTestPlan && selectedVersions && selectedEnvs && getUsers ? (
@@ -705,32 +756,11 @@ const StudentWebClientPerformance = () => {
         )}
         {showComponent ? (
           <>
-            <Divider />
-            <StyledContainer
-              maxWidth="xl"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <FormControl component="fieldset">
-                <RadioGroup
-                  name="radioGroup"
-                  value={selectedOption}
-                  onChange={handleRadioChange}
-                >
-                  {getUsers.lastTenTestRunDetail.map((row) => (
-                    <FormControlLabel
-                      // key={row.date}
-                      value={row.testDetailFilePath}
-                      control={<Radio />}
-                      label={row.date}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-              {console.log(loading)}
+            {/* <Divider /> */}
+
+            <Paper elevation={3} sx={{ p: 2 }}>
+              {/* fieldset"> */}
+
               {loading ? (
                 <Grid>
                   <div className="loader">
@@ -743,74 +773,399 @@ const StudentWebClientPerformance = () => {
                     />
                   </div>
                 </Grid>
-              ) : detailData.length !== 0 ? (
+              ) : detailData.length != 0 ? (
                 <>
-                  <IconButton onClick={handleGoBack}>
-                    <ArrowBack />
-                  </IconButton>
-                  <Divider variant="middle" style={{ margin: "10px 0" }} />
+                  <Grid container columnSpacing={4} item xs>
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
+                      <FormControl>
+                        <Box
+                          elevation={3}
 
-                  <Grid container rowSpacing={1} columnSpacing={0}>
-                    <MainCard title="Meta Data">
-                      <Stack spacing={0.5} sx={{ mt: -1.5 }}>
-                        <Typography variant="h4">
-                          User: {detailData.metadata.runByUser}
-                        </Typography>
-                        <Typography variant="h5">
-                          Duration: {detailData.metadata.durationInMin}min
-                        </Typography>
-                        <Breadcrumbs aria-label="breadcrumb">
-                          <Typography variant="h6">
-                            Start Time: {detailData.metadata.startTime}
+                          // sx={{
+                          //   border: "1px solid #ccc",
+                          //   borderRadius: "4px",
+                          //   padding: "10px",
+                          // }}
+                        >
+                          <FormLabel id="demo-radio-buttons-group-label">
+                            Select Test
+                          </FormLabel>
+                          <RadioGroup
+                            name="radioGroup"
+                            value={selectedOption}
+                            onChange={handleRadioChange}
+                            color="secondary"
+                          >
+                            {getUsers.lastTenTestRunDetail.map((row) => (
+                              <FormControlLabel
+                                // ey={row.date}
+                                value={row.testDetailFilePath}
+                                control={<Radio />}
+                                label={row.date}
+                              />
+                            ))}
+                          </RadioGroup>
+                        </Box>
+                      </FormControl>
+                    </Grid>
+
+                    {/* <Divider orientation="vertical" variant="middle" /> */}
+
+                    {/* <Grid item xs={4} sm={4} md={4}>
+                      <Typography variant="h5"> Summary</Typography>
+                      <Card xs={6}>
+                        <CardContent>
+                          <Stack spacing={0.5} sx={{ mt: -1.5 }}>
+                            <Typography variant="h6">
+                              User: {detailData.metadata.runByUser} / Duration:{" "}
+                              {detailData.metadata.durationInMin}min
+                            </Typography>
+
+                            <Breadcrumbs aria-label="breadcrumb">
+                              <Typography variant="h6">
+                                Start Time: {detailData.metadata.startTime}
+                              </Typography>
+                              <Typography variant="h6">
+                                End Time: {detailData.metadata.endTime}
+                              </Typography>{" "}
+                            </Breadcrumbs>
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    </Grid> */}
+                  </Grid>
+
+                  <Divider variant="middle" />
+
+                  <Grid
+                    container
+                    // justifyContent="space-evenly"
+                    direction="row"
+                    columnSpacing={2}
+                    rowSpacing={2}
+                    item
+                  >
+                    <Grid item xs={2.5}>
+                      <Card>
+                        <CardContent>
+                          <Typography sx={{ mb: 0 }} color="text.secondary">
+                            Average Throughput(Hits/s)
                           </Typography>
-                          <Typography variant="h6">
-                            End Time: {detailData.metadata.endTime}
-                          </Typography>{" "}
-                        </Breadcrumbs>
-                      </Stack>
-                    </MainCard>
+                          <Typography variant="h5" component="div">
+                            {detailData.summaryData.avgThroughput}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={2.5}>
+                      <Card>
+                        <CardContent>
+                          <Typography sx={{ mb: 0 }} color="text.secondary">
+                            Average Response Time(Ms)
+                          </Typography>
+                          <Typography variant="h5" component="div">
+                            {detailData.summaryData.avgResponseTime}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={2.5}>
+                      <Card>
+                        <CardContent>
+                          <Typography sx={{ mb: 0 }} color="text.secondary">
+                            90% Response Time(Ms)
+                          </Typography>
+                          <Typography variant="h5" component="div">
+                            {detailData.summaryData["90PercentileResponseTime"]}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={2.5}>
+                      <Card>
+                        <CardContent>
+                          <Typography sx={{ mb: 0 }} color="text.secondary">
+                            Error Rate(%)
+                          </Typography>
+                          <Typography variant="h5" component="div">
+                            {detailData.summaryData.errorsPercentage}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Card>
+                        <CardContent>
+                          <Typography sx={{ mb: 0 }} color="text.secondary">
+                            Virtual Users
+                          </Typography>
+                          <Typography variant="h5" component="div">
+                            {detailData.summaryData.virtualUsers}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
                   </Grid>
-                  <Grid container rowSpacing={2} columnSpacing={2}>
-                    <Grid item xs={12} sx={{ mb: -1 }}>
-                      <Typography variant="h5">Details Summary</Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Typography variant="h5">
+                        Top 5 Slowest Response(By Average Response Time)
+                      </Typography>
+
+                      <MainCard sx={{ mt: 1 }} content={false}>
+                        <TableContainer component={Paper}>
+                          <Table aria-label="simple table">
+                            <TableHead text="Last Ten Test Run Details">
+                              <TableRow>
+                                <TableCell>Request</TableCell>
+                                <TableCell align="right">#Samples</TableCell>
+                                <TableCell align="right">
+                                  Average Time
+                                </TableCell>
+                                <TableCell align="right">90% Time</TableCell>
+                                <TableCell align="right">Max Time</TableCell>
+                                {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {detailData.data.topSlowRequests.map((row) => (
+                                <TableRow>
+                                  <TableCell component="th" scope="row">
+                                    {row.request}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row.noOfSamples}
+                                  </TableCell>
+                                  {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
+                                  <TableCell align="right">
+                                    {row.avgResponseTime}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row["90PercentileResponseTime"]}
+                                  </TableCell>
+
+                                  <TableCell align="right">
+                                    {row.MaxTime}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </MainCard>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={2.3}>
-                      <AnalyticEcommerce
-                        title="Average Throughput(Hits/s)"
-                        count={detailData.summaryData.avgThroughput}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={2.3}>
-                      <AnalyticEcommerce
-                        title="Average Response Time(Ms)"
-                        count={detailData.summaryData.avgResponseTime}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={2.3}>
-                      <AnalyticEcommerce
-                        title="90% Response Time(Ms)"
-                        count={
-                          detailData.summaryData["90PercentileResponseTime"]
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={2.3}>
-                      <AnalyticEcommerce
-                        title="Error Rate(%)"
-                        count={detailData.summaryData.errorsPercentage}
-                        // color='warning'
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4} lg={2.3}>
-                      <AnalyticEcommerce
-                        title="Virtual Users"
-                        count={detailData.summaryData.virtualUsers}
-                        isLoss
-                        // color='warning'
-                      />
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Typography variant="h5">Top 5 Errors</Typography>
+                      <MainCard sx={{ mt: 1 }} content={false}>
+                        <TableContainer component={Paper}>
+                          <Table aria-label="simple table">
+                            <TableHead text="Last Ten Test Run Details">
+                              <TableRow>
+                                <TableCell>Response Code</TableCell>
+                                <TableCell align="right">Message</TableCell>
+                                <TableCell align="right">Count</TableCell>
+                                {/* <TableCell
+                                  align="right"
+                                  style={{ whiteSpace: "normal" }}
+                                >
+                                  Url
+                                </TableCell> */}
+                                {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {detailData.data.topErrors.map((row) => (
+                                <TableRow
+                                // style={{
+                                //   backgroundColor: "#f5f5f5",
+                                //   height: "25px",
+                                // }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {row.responseCode}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row.message}
+                                  </TableCell>
+                                  {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
+                                  <TableCell align="right">
+                                    {row.count}
+                                  </TableCell>
+                                  {/* <TableCell
+                                    align="right"
+                                    style={{
+                                      whiteSpace: "nowrap",
+                                      textOverflow: "ellipsis",
+                                      width: "300px",
+                                      display: "block",
+                                      overflow: "hidden",
+                                    }}
+                                  >
+                                    {row.url}
+                                  </TableCell> */}
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </MainCard>
                     </Grid>
                   </Grid>
-                  <Grid container rowSpacing={2} columnSpacing={0}>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Typography variant="h5">All Errors</Typography>
+                      <MainCard sx={{ mt: 1 }} content={false}>
+                        <TableContainer component={Paper}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead text="All Errors">
+                              <TableRow>
+                                <TableCell>Response Code</TableCell>
+                                <TableCell align="right">Message</TableCell>
+                                <TableCell align="right">Count</TableCell>
+                                {/* <TableCell
+                                  align="right"
+                                  style={{ whiteSpace: "normal" }}
+                                >
+                                  Url
+                                </TableCell> */}
+                                {/* <TableCell align="right">Name</TableCell> */}
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {detailData.data.allErrorData
+                                .slice(
+                                  page * rowsPerPage,
+                                  page * rowsPerPage + rowsPerPage
+                                )
+                                .map((row) => (
+                                  <TableRow>
+                                    <TableCell component="th" scope="row">
+                                      {row.responseCode}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.message}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.count}
+                                    </TableCell>
+                                    {/* <TableCell
+                                      align="right"
+                                      style={{
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        width: "300px",
+                                        display: "block",
+                                        overflow: "hidden",
+                                      }}
+                                    >
+                                      {row.url}
+                                    </TableCell> */}
+
+                                    {/* <TableCell
+                                      style={{
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        width: "300px",
+                                        display: "block",
+                                        overflow: "hidden",
+                                      }}
+                                    >
+                                      {row.name}
+                                    </TableCell> */}
+                                  </TableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        <TablePagination
+                          rowsPerPageOptions={[5, 10, 20]}
+                          component="div"
+                          count={detailData.data.allErrorData.length}
+                          rowsPerPage={rowsPerPage}
+                          page={page}
+                          onPageChange={handleChangePage}
+                          onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                      </MainCard>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                      <Typography variant="h5">All Aggregated Data</Typography>
+                      <MainCard sx={{ mt: 1 }} content={false}>
+                        <TableContainer component={Paper}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead text="All Aggregate Data">
+                              <TableRow>
+                                <TableCell align="right">
+                                  No.of Samples
+                                </TableCell>
+                                <TableCell align="right">
+                                  Average Response Time
+                                </TableCell>
+                                <TableCell align="right">
+                                  90% Resp.Time
+                                </TableCell>
+                                <TableCell align="right">
+                                  99% Resp.Time
+                                </TableCell>
+                                <TableCell align="right">
+                                  Erros By Percentage
+                                </TableCell>
+                                <TableCell align="right">Hits/Sec</TableCell>
+                                {/* <TableCell>Label</TableCell> */}
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {detailData.data.allAggregateData
+                                .slice(
+                                  aggreePage * aggreeRowsPerPage,
+                                  aggreePage * aggreeRowsPerPage +
+                                    aggreeRowsPerPage
+                                )
+                                .map((row) => (
+                                  <TableRow>
+                                    <TableCell align="right">
+                                      {row.noOfSamples}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.avgResponseTime}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row["90PercentileResponseTime"]}
+                                    </TableCell>
+
+                                    <TableCell>
+                                      {row["99PercentileResponseTime"]}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row["errorsByPercentage"]}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row["hitsPerSec"]}
+                                    </TableCell>
+                                    {/* <TableCell component="th" scope="row">
+                                      {row.label}
+                                    </TableCell> */}
+                                  </TableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        <TablePagination
+                          rowsPerPageOptions={[5, 10, 20]}
+                          component="div"
+                          count={detailData.data.allAggregateData.length}
+                          rowsPerPage={aggreeRowsPerPage}
+                          page={aggreePage}
+                          onPageChange={aggreehandleChangePage}
+                          onRowsPerPageChange={aggreehandleChangeRowsPerPage}
+                        />
+                      </MainCard>
+                    </Grid>
+                  </Grid>
+                  <Divider />
+
+                  <Grid container rowSpacing={3} columnSpacing={0}>
                     <Grid item xs={12} md={5} lg={12}>
                       <Grid
                         container
@@ -835,183 +1190,85 @@ const StudentWebClientPerformance = () => {
                       </MainCard>
                     </Grid>
                   </Grid>
-                  <Grid rowSpacing={2} columnSpacing={0}>
-                    <Grid
-                      container
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Grid item>
-                        <Typography variant="h5">
-                          Top 5 Slowest Response(By Average Response Time)
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    <MainCard sx={{ mt: 2 }} content={false}>
-                      <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                          <TableHead text="Last Ten Test Run Details">
-                            <TableRow>
-                              <TableCell>Request</TableCell>
-                              <TableCell align="right">#Samples</TableCell>
-                              <TableCell align="right">Average Time</TableCell>
-                              <TableCell align="right">90% Time</TableCell>
-                              <TableCell align="right">Max Time</TableCell>
-                              {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {detailData.data.topSlowRequests.map((row) => (
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  {row.request}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.noOfSamples}
-                                </TableCell>
-                                {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
-                                <TableCell align="right">
-                                  {row.avgResponseTime}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row["90PercentileResponseTime"]}
-                                </TableCell>
+                  <Divider />
 
-                                <TableCell align="right">
-                                  {row.MaxTime}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </MainCard>
-                  </Grid>
-                  <Grid container rowSpacing={0} columnSpacing={0}>
-                    <Grid
-                      container
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Grid item>
-                        <Typography variant="h5">Top 5 Errors</Typography>
+                  <Grid container rowSpacing={3} columnSpacing={0}>
+                    <Grid item xs={4}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Grid item>
+                          <Typography variant="h5">Zscore Result</Typography>
+                        </Grid>
+                      </Grid>
+                      <MainCard content={false} sx={{ mt: 1.5 }}>
+                        <Box sx={{ pt: 1, pr: 2 }}>
+                          <Chart
+                            options={apexLineZscoreOptions}
+                            series={apexLineZscoreSeries}
+                            type="area"
+                            height={350}
+                          />
+                        </Box>
+                      </MainCard>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Grid item>
+                          <Typography variant="h5">Average Response</Typography>
+                        </Grid>
+                        <Grid item />
+                      </Grid>
+                      <MainCard sx={{ mt: 2 }} content={false}>
+                        <Chart
+                          options={apexLineAverageResponseOptions}
+                          series={apexLineAverageResponseSeries}
+                          type="area"
+                          height={350}
+                        />
+                      </MainCard>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Grid item>
+                          <Typography variant="h5">Appdex</Typography>
+                        </Grid>
+                        <Grid item />
+                      </Grid>
+                      <MainCard sx={{ mt: 2 }} content={false}>
+                        <Chart
+                          options={apexBarAppdexOptions}
+                          series={apexBarAppdexSeries}
+                          type="bar"
+                          height={350}
+                        />
+                      </MainCard>
+                    </Grid>
+                    <Grid item xs={12} md={5} lg={8}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Grid item />
                       </Grid>
                     </Grid>
-                    <MainCard sx={{ mt: 2 }} content={false}>
-                      <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                          <TableHead text="Last Ten Test Run Details">
-                            <TableRow>
-                              <TableCell>Response Code</TableCell>
-                              <TableCell align="right">Message</TableCell>
-                              <TableCell align="right">Count</TableCell>
-                              <TableCell align="right">Url</TableCell>
-                              {/* <TableCell align='right'>Test Detail File Path</TableCell> */}
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {detailData.data.topErrors.map((row) => (
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  {row.responseCode}
-                                </TableCell>
-                                <TableCell align="right">
-                                  {row.message}
-                                </TableCell>
-                                {/* <TableCell align="right">{row.90PercentileResponseTime}</TableCell> */}
-                                <TableCell align="right">{row.count}</TableCell>
-                                <TableCell
-                                  align="right"
-                                  style={{ wordBreak: "break-all" }}
-                                >
-                                  {row.url}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </MainCard>
                   </Grid>
                 </>
               ) : (
                 " "
               )}
-
-              <DetailSummary />
-              <Box sx={{ display: "flex" }}>
-                <Grid item xs={12}>
-                  <Grid
-                    container
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Grid item>
-                      <Typography variant="h5">Zscore Result</Typography>
-                    </Grid>
-                  </Grid>
-                  <MainCard content={false} sx={{ mt: 1.5 }}>
-                    <Box sx={{ pt: 1, pr: 2 }}>
-                      <Chart
-                        options={apexLineZscoreOptions}
-                        series={apexLineZscoreSeries}
-                        type="area"
-                        height={350}
-                      />
-                    </Box>
-                  </MainCard>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid
-                    container
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Grid item>
-                      <Typography variant="h5">Average Response</Typography>
-                    </Grid>
-                    <Grid item />
-                  </Grid>
-                  <MainCard sx={{ mt: 2 }} content={false}>
-                    <Chart
-                      options={apexLineAverageResponseOptions}
-                      series={apexLineAverageResponseSeries}
-                      type="area"
-                      height={350}
-                    />
-                  </MainCard>
-                </Grid>
-                <Grid item xs={12}>
-                  <Grid
-                    container
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Grid item>
-                      <Typography variant="h5">Appdex</Typography>
-                    </Grid>
-                    <Grid item />
-                  </Grid>
-                  <MainCard sx={{ mt: 2 }} content={false}>
-                    <Chart
-                      options={apexBarAppdexOptions}
-                      series={apexBarAppdexSeries}
-                      type="bar"
-                      height={350}
-                    />
-                  </MainCard>
-                </Grid>
-                <Grid item xs={12} md={5} lg={8}>
-                  <Grid
-                    container
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Grid item />
-                  </Grid>
-                </Grid>
-              </Box>
-            </StyledContainer>
+            </Paper>
           </>
         ) : (
           ""
