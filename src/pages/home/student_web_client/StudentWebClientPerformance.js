@@ -100,7 +100,7 @@ const StudentWebClientPerformance = () => {
         // debugger;
         const jsonData = await response.json();
         // debugger;
-        // console.log({ jsonData }, 'check')
+        console.log({ jsonData }, "check");
 
         setUsers(jsonData);
         // console.log(loading);
