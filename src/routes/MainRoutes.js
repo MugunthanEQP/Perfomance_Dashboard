@@ -1,81 +1,52 @@
-import { lazy } from 'react'
+import { lazy } from "react";
+import Loadable from "./../components/Loadable";
+import MainLayout from "./../layout/MainLayout";
 
-// project import
-import Loadable from './../components/Loadable'
-import MainLayout from './../layout/MainLayout'
-
-// render - dashboard
-// const DashboardDefault = Loadable(lazy(() => import('./../pages/dashboard')))
-const SamplePage = Loadable(
-  lazy(() => import('./../pages/extra-pages/SamplePage'))
-)
-
-// render - sample page
-const Home = Loadable(lazy(() => import('./../pages/home/Home')))
+const Home = Loadable(lazy(() => import("./../pages/home/Home")));
 const SwcPerformance = Loadable(
   lazy(() =>
-    import('./../pages/home/student_web_client/StudentWebClientPerformance')
+    import("./../pages/home/student_web_client/StudentWebClientPerformance")
   )
-)
+);
+const DetailSummary = Loadable(
+  lazy(() => import("./../pages/home/student_web_client/DetailSummary"))
+);
 
-// render - utilities
-// const Typography = Loadable(
-//   lazy(() => import('./../pages/components-overview/Typography'))
-// )
-// const Color = Loadable(
-//   lazy(() => import('./../pages/components-overview/Color'))
-// )
-// const Shadow = Loadable(
-//   lazy(() => import('./../pages/components-overview/Shadow'))
-// )
-// const AntIcons = Loadable(
-//   lazy(() => import('./../pages/components-overview/AntIcons'))
-// )
+const UpdatedSummary = Loadable(
+  lazy(() => import("./../pages/home/student_web_client/UpdatedSummary"))
+);
 
-// ==============================|| MAIN ROUTING ||============================== //
+const WcSonarqube = Loadable(
+  lazy(() =>
+    import("./../pages/home/studnet_web_client_sonarqube/SonarqubeWebclient")
+  )
+);
 
 const MainRoutes = {
-  path: '/',
+  path: "/",
   element: <MainLayout />,
   children: [
     {
-      path: '/',
+      path: "/",
       element: <Home />,
     },
     {
-      path: 'swcperformance',
+      path: "swcperformance",
       element: <SwcPerformance />,
     },
-    // {
-    //   path: 'color',
-    //   element: <Color />,
-    // },
-    // {
-    //   path: 'dashboard',
-    //   children: [
-    //     {
-    //       path: 'default',
-    //       element: <Home />,
-    //     },
-    //   ],
-    // },
-    // {
-    //   path: 'sample-page',
-    //   element: <SamplePage />,
-    // },
-    // {
-    //   path: 'shadow',
-    //   element: <Shadow />,
-    // },
-    // {
-    //   path: 'typography',
-    //   element: <Typography />,
-    // },
-    // {
-    //   path: 'icons/ant',
-    //   element: <AntIcons />,
-    // },
+    {
+      path: "detailsummary",
+      element: <DetailSummary />,
+    },
+    {
+      path: "updatedsummary",
+      element: <UpdatedSummary />,
+    },
+    {
+      path: "sonarqubewebclient",
+      element: <WcSonarqube />,
+    },
   ],
-}
+};
 
-export default MainRoutes
+export default MainRoutes;
