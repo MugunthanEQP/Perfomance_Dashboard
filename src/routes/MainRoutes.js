@@ -16,8 +16,10 @@ const UpdatedSummary = Loadable(
   lazy(() => import("./../pages/home/student_web_client/UpdatedSummary"))
 );
 
-const Pair = Loadable(
-  lazy(() => import("./../pages/home/student_web_client/Pair"))
+const WcSonarqube = Loadable(
+  lazy(() =>
+    import("./../pages/home/studnet_web_client_sonarqube/SonarqubeWebclient")
+  )
 );
 
 const MainRoutes = {
@@ -41,8 +43,8 @@ const MainRoutes = {
       element: <UpdatedSummary />,
     },
     {
-      path: "pair",
-      element: <Pair />,
+      path: "sonarqubewebclient",
+      element: <WcSonarqube />,
     },
   ],
 };

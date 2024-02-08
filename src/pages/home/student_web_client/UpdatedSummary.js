@@ -38,14 +38,7 @@ import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import { IconButton, Collapse } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-// import DetailSummary from "./DetailSummary";
 import { TailSpin } from "react-loader-spinner";
-
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import AnalyticEcommerce from "../../../components/cards/statistics/AnalyticEcommerce";
-import IconContext from "@ant-design/icons/lib/components/Context";
-// import HeaderContent from "../../../layout/MainLayout/Header/HeaderContent";
 
 function parseXML(text) {
   if (window.DOMParser) {
@@ -65,7 +58,8 @@ const StudentWebClientPerformance = () => {
   const [selectedOption, setSelectedOption] = useState(""); // Initialize selectedOption state with an empty string
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  const [detailData, setDetailData] = React.useState([]);
+  const [loading, setLoading] = useState(false);
   const [aggreePage, setAggreePage] = React.useState(0);
   const [aggreeRowsPerPage, setAggreeRowsPerPage] = React.useState(5);
 
@@ -101,15 +95,10 @@ const StudentWebClientPerformance = () => {
     setAggreePage(0);
   };
 
-  // const StyledContainer = styled(Container)({
-  //   boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-  // });
-  // const disableHandleClick = () => setShowComponent(false) //hides component if shown, reveals if not shown
-
   useEffect(() => {
     // GET request using fetch inside useEffect React hook
     fetch(
-      "https://load900108intstg.blob.core.windows.net/qadashboard?restype=container&comp=list&sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D"
+      "https://load900108intstg.blob.core.windows.net/qadashboard?restype=container&comp=list&sp=racwdli&st=2024-01-19T12:46:16Z&se=2025-12-30T20:46:16Z&spr=https&sv=2022-11-02&sr=c&sig=WOuX4AJ5xswDXs3sXL0xKHHkOP3JmM78Oue%2FVwdnDX8%3D"
     )
       .then((response) => response.text())
       .then((data) => {
@@ -139,34 +128,6 @@ const StudentWebClientPerformance = () => {
     // empty dependency array means this effect will only run once (like componentDidMount in classes)
   }, []);
 
-  // function fetchData() {
-  //   const url =
-  //     "https://load900108intstg.blob.core.windows.net/qadashboard/performance/student web client/" +
-  //     selectedTestPlan +
-  //     "/" +
-  //     selectedVersions +
-  //     "/" +
-  //     selectedEnvs +
-  //     "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
-  //   fetch(url, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //     },
-  //   })
-  //     .then(async (response) => {
-  //       const jsonData = await response.json();
-  //       setSelectedOption(jsonData.lastTenTestRunDetail[0].testDetailFilePath);
-
-  //       setUsers(jsonData);
-  //     })
-  //     .catch((error) => {
-  //       // debugger;
-  //       setShowComponent(false);
-  //       // return Promise.reject(error)
-  //     });
-  // }
-
   useEffect(() => {
     if (selectedTestPlan && selectedEnvs && selectedVersions) {
       // return fetchData();
@@ -177,7 +138,7 @@ const StudentWebClientPerformance = () => {
         selectedVersions +
         "/" +
         selectedEnvs +
-        "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
+        "/PerformanceSummary.json?sp=r&st=2024-01-18T09:50:18Z&se=2025-12-31T17:50:18Z&spr=https&sv=2022-11-02&sr=c&sig=wYYLFXEWVxfH9oU7d4PbPxWC9LlF3%2FJ77GhSpBPeshU%3D";
       fetch(url, {
         headers: {
           "Content-Type": "application/json",
@@ -293,6 +254,7 @@ const StudentWebClientPerformance = () => {
       );
     }
   }
+
   SubmitButton();
 
   const apexLineZscoreOptions = {
@@ -435,9 +397,6 @@ const StudentWebClientPerformance = () => {
     },
   ];
 
-  const [detailData, setDetailData] = React.useState([]);
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     // debugger;
     if (!selectedOption) {
@@ -449,7 +408,7 @@ const StudentWebClientPerformance = () => {
     const url =
       "https://load900108intstg.blob.core.windows.net/qadashboard/" +
       selectedOption +
-      "?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
+      "?sp=r&st=2024-01-18T09:50:18Z&se=2025-12-31T17:50:18Z&spr=https&sv=2022-11-02&sr=c&sig=wYYLFXEWVxfH9oU7d4PbPxWC9LlF3%2FJ77GhSpBPeshU%3D";
     fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -501,13 +460,6 @@ const StudentWebClientPerformance = () => {
           ? detailData.graphData.concurrentUserByResponse.concurrentUsers
           : [],
     },
-    // {
-    //   name: 'Hits/S',
-    //   data:
-    //     Object.keys(detailData).length > 0
-    //       ? detailData.graphData.concurrentUserByResponse.concurrentUsers
-    //       : [],
-    // }
   ];
   const timelineConcurrentUsersandLatencyOptions = {
     chart: {
@@ -669,9 +621,6 @@ const StudentWebClientPerformance = () => {
         <IconButton onClick={handleGoBack}>
           <ArrowBack />
         </IconButton>
-        {/* <Grid item xs={12} sx={{ mb: -2.25 }} rowSpacing={4.5}>
-          <Typography variant="h5">Search Querying</Typography>
-        </Grid> */}
         <Grid item xs={12} sm={6} md={2}>
           <FormControl>
             <InputLabel id="testplan">TestPlan</InputLabel>
@@ -756,11 +705,7 @@ const StudentWebClientPerformance = () => {
         )}
         {showComponent ? (
           <>
-            {/* <Divider /> */}
-
             <Paper elevation={3} sx={{ p: 2 }}>
-              {/* fieldset"> */}
-
               {loading ? (
                 <Grid>
                   <div className="loader">
@@ -778,15 +723,7 @@ const StudentWebClientPerformance = () => {
                   <Grid container columnSpacing={4} item xs>
                     <Grid item xs={12} sm={6} md={4} lg={2}>
                       <FormControl>
-                        <Box
-                          elevation={3}
-
-                          // sx={{
-                          //   border: "1px solid #ccc",
-                          //   borderRadius: "4px",
-                          //   padding: "10px",
-                          // }}
-                        >
+                        <Box elevation={3}>
                           <FormLabel id="demo-radio-buttons-group-label">
                             Select Test
                           </FormLabel>
@@ -906,6 +843,9 @@ const StudentWebClientPerformance = () => {
                       </Card>
                     </Grid>
                   </Grid>
+
+                  <Divider />
+
                   <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={6}>
                       <Typography variant="h5">

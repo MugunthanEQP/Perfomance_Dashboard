@@ -62,9 +62,8 @@ const Home = () => (
                   <Grid item xs={12} sm={6} md={4}>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      href="/sonarqubewebclient"
                       fullWidth
-                      disableElevation
                     >
                       Sonarqube
                     </Button>

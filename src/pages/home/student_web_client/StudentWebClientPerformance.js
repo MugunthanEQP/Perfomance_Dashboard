@@ -51,7 +51,7 @@ const StudentWebClientPerformance = () => {
   useEffect(() => {
     // GET request using fetch inside useEffect React hook
     fetch(
-      "https://load900108intstg.blob.core.windows.net/qadashboard?restype=container&comp=list&sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D"
+      "https://load900108intstg.blob.core.windows.net/qadashboard?restype=container&comp=list&sp=r&st=2024-01-18T09:50:18Z&se=2025-12-31T17:50:18Z&spr=https&sv=2022-11-02&sr=c&sig=wYYLFXEWVxfH9oU7d4PbPxWC9LlF3%2FJ77GhSpBPeshU%3D"
     )
       .then((response) => response.text())
       .then((data) => {
@@ -89,7 +89,7 @@ const StudentWebClientPerformance = () => {
       selectedVersions +
       "/" +
       selectedEnvs +
-      "/PerformanceSummary.json?sp=racwdli&st=2023-01-11T10:58:00Z&se=2023-12-30T18:58:00Z&spr=https&sv=2021-06-08&sr=c&sig=GTZDo4GuuXM4HsP8Tt6l%2FX%2FUgKh0P5GOPa%2Fqhe3NX%2Fo%3D";
+      "/PerformanceSummary.json?sp=r&st=2024-01-18T09:50:18Z&se=2025-12-31T17:50:18Z&spr=https&sv=2022-11-02&sr=c&sig=wYYLFXEWVxfH9oU7d4PbPxWC9LlF3%2FJ77GhSpBPeshU%3D";
     fetch(url, {
       headers: {
         "Content-Type": "application/json",
