@@ -91,9 +91,9 @@ const Profile = () => {
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           {/* <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} /> */}
           {/* <Typography variant="button"  onClick={handleLogout}>Logout</Typography> */}
-          <IconButton size="large" color="primary" onClick={handleLogout}>
+          {/* <IconButton size="large" color="primary" onClick={handleLogout}>
             <LogoutOutlined />
-          </IconButton>
+          </IconButton> */}
         </Stack>
       </ButtonBase>
       {/* <Popper

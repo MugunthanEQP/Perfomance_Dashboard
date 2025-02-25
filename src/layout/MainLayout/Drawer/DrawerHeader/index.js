@@ -10,24 +10,11 @@ import logo from '../../../../assets/images/Anthology-Logo-Vector.svg';
 
 const Logo = () => (
   
-        // <img src={logo} alt="Anthology logo" style={{position:'sticky'}} />
-  
-        // <img src={logo} alt="Anthology logo"  />
-  
-        // <img src={logo} alt="Anthology logo"  />
         <img src={logo} alt="Anthology logo" style={{ position: 'absolute', 
-            top: '-30px', 
-            height: '130px',
+            top: '10px', 
+            height: '110px',
             left: '70px'
-          }} />
- 
-    
-        
- 
-    
-    
-    
-    
+          }} />  
 );
 
 // ==============================|| DRAWER HEADER ||============================== //
